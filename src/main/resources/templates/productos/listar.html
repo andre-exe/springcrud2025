@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+<div th:replace="~{layout :: layout(~{::content}, 'Productos')}">
+    
+    <div th:fragment="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-boxes me-2"></i>Gestión de Productos</h2>
+                    <button class="btn btn-primary" onclick="abrirModalNuevo()">
+                        <i class="fas fa-plus me-1"></i>Nuevo Producto
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover" id="tabla-productos">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incluir modal desde fragmento -->
+        <div th:replace="~{fragments/modalProducto :: modalProducto}"></div>
+
+        <!-- Script específico de esta página -->
+        <script src="/js/productos.js"></script>
+    </div>
+
+</div>
+
+</body>
+</html>
