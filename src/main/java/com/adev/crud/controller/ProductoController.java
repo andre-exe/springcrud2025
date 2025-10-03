@@ -1,18 +1,14 @@
 package com.adev.crud.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.adev.crud.model.Producto;
+
 import com.adev.crud.service.ProductoService;
 
 import org.springframework.ui.Model;
@@ -21,49 +17,47 @@ import org.springframework.ui.Model;
 @RequestMapping("/productos")
 public class ProductoController {
 
+    @Autowired
+    private ProductoService productoService;
 
-    private final ProductoService service;
-
-    public ProductoController(ProductoService service) {
-        this.service = service;
-    }
-
-    // Página principal
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("productos", service.listar());
+    public String listarProductos(Model model) {
+        model.addAttribute("productos", productoService.listarProductos());
+        return "productos/index";
+    } 
+    
+    @GetMapping("/nuevo")
+    public String crearProductoForm(Model model) {
         model.addAttribute("producto", new Producto());
-        return "productos/listar";
+        return "productos/nuevo";
     }
 
-    // API REST para AJAX
-    @GetMapping("/listar")
-    @ResponseBody
-    public List<Producto> listar() {
-        return service.listar();
+    @PostMapping
+    public String guardarProducto(@ModelAttribute("producto") Producto producto) {
+        productoService.guardarProducto(producto);
+        return "redirect:/productos";
     }
 
-    @PostMapping("/guardar")
-    @ResponseBody
-    public ResponseEntity<Producto> guardar(@RequestBody Producto producto) {
-        Producto p = service.guardar(producto);
-        return ResponseEntity.ok(p);
+    @GetMapping("/editar/{id}")
+    public String editarProductoForm(@PathVariable Long id, Model model) {
+        Producto producto = productoService.obtenerProductoPorId(id);
+        model.addAttribute("producto", producto);
+        return "productos/editar";
     }
 
-    @GetMapping("/obtener/{id}")
-    @ResponseBody
-    public ResponseEntity<Producto> obtener(@PathVariable Long id) {
-        return service.obtener(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PostMapping("/{id}")
+    public String actualizarProducto(@PathVariable Long id, @ModelAttribute("producto") Producto producto) {
+        Producto prodExistente = productoService.obtenerProductoPorId(id);
+        prodExistente.setNombre(producto.getNombre());
+        prodExistente.setDescripcion(producto.getDescripcion());
+        prodExistente.setPrecio(producto.getPrecio());
+        productoService.guardarProducto(prodExistente);
+        return "redirect:/productos";
     }
 
-     @DeleteMapping("/eliminar/{id}")
-    @ResponseBody
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        service.eliminar(id);
-        return ResponseEntity.ok().build();
-    }
-    
-    
+    @GetMapping("/eliminar/{id}")
+    public String eliminarProducto(@PathVariable Long id) {
+        productoService.eliminarProducto(id);
+        return "redirect:/productos";
+    }   
 }

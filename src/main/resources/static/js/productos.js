@@ -1,6 +1,6 @@
 let modal = new bootstrap.Modal(document.getElementById('modalProducto'));
 
-function cargarTabla() {
+/*function cargarTabla() {
     fetch('/productos/listar')
         .then(res => res.json())
         .then(data => {
@@ -21,7 +21,7 @@ function cargarTabla() {
                 `;
             });
         });
-}
+}*/
 
 function abrirModalNuevo() {
     document.getElementById('id').value = "";

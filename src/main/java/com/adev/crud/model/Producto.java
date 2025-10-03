@@ -1,6 +1,6 @@
 package com.adev.crud.model;
 import jakarta.persistence.*;
-import java.math.BigDecimal;
+
 
 @Entity
 @Table(name = "productos")
@@ -11,14 +11,14 @@ public class Producto {
 
   private String nombre;
   private String descripcion;
-  private BigDecimal precio;
+  private Double precio;
 
   // Constructor vacío
   public Producto() {
   }
 
   // Constructor con todos los campos
-  public Producto(Long id, String nombre, String descripcion, BigDecimal precio) {
+  public Producto(Long id, String nombre, String descripcion, Double precio) {
     this.id = id;
     this.nombre = nombre;
     this.descripcion = descripcion;
@@ -50,11 +50,11 @@ public class Producto {
     this.descripcion = descripcion;
   }
 
-  public BigDecimal getPrecio() {
+  public Double getPrecio() {
     return precio;
   }
 
-  public void setPrecio(BigDecimal precio) {
+  public void setPrecio(Double precio) {
     this.precio = precio;
   }
 }
