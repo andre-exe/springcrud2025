@@ -1,35 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Productos</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layouts :: layout(~{::content})}">
 <body>
-    <div th:replace="layouts/layouts :: layout('Lista de Productos', ${::body})">
-        <h2>Lista de Productos</h2>
-        <a class="btn btn-primary mb-3" href="/productos/nuevo">Nuevo Producto</a>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-            </tr>
+    <th:block th:fragment="content">
+        <h2 class="mb-4">Lista de Productos</h2>
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalNuevo">
+            + Nuevo Producto
+        </button>
+
+        <table class="table table-striped table-hover table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
             </thead>
             <tbody>
-            <tr th:each="producto : ${productos}">
-                <td th:text="${producto.id}"></td>
-                <td th:text="${producto.nombre}"></td>
-                <td th:text="${producto.descripcion}"></td>
-                <td th:text="${producto.precio}"></td>
-                <td>
-                    <a th:href="@{'/productos/editar/' + ${producto.id}}" class="btn btn-warning btn-sm">Editar</a>
-                    <a th:href="@{'/productos/eliminar/' + ${producto.id}}" class="btn btn-danger btn-sm">Eliminar</a>
-                </td>
-            </tr>
+                <tr th:each="producto : ${productos}">
+                    <td th:text="${producto.id}"></td>
+                    <td th:text="${producto.nombre}"></td>
+                    <td th:text="${producto.descripcion}"></td>
+                    <td th:text="${producto.precio}"></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" 
+                                th:attr="data-id=${producto.id}, 
+                                         data-nombre=${producto.nombre}, 
+                                         data-descripcion=${producto.descripcion}, 
+                                         data-precio=${producto.precio}"
+                                onclick="abrirModalEditar(this)"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#modalEditar">
+                            Editar
+                        </button>
+                        <a th:href="@{'/productos/eliminar/' + ${producto.id}}" 
+                           class="btn btn-danger btn-sm">Eliminar</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
-    </div>
+        <!-- Incluir modales -->
+        <div th:replace="~{productos/modal-nuevo :: modalNuevo}"></div>
+        <div th:replace="~{productos/modal-editar :: modalEditar}"></div>
+        <!-- Incluir script de edición -->
+        <script th:replace="~{productos/modal-editar :: scriptEditar}"></script>
+    </th:block>
 </body>
 </html>

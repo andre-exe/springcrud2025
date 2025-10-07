@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="modalEditar" class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formEditar" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" id="editarId" name="id">
+                        <div class="mb-3">
+                            <label for="editarNombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="editarNombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarDescripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="editarDescripcion" name="descripcion" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarPrecio" class="form-label">Precio</label>
+                            <input type="number" step="0.01" class="form-control" id="editarPrecio" name="precio" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script th:fragment="scriptEditar">
+        function abrirModalEditar(button) {
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            const descripcion = button.getAttribute('data-descripcion');
+            const precio = button.getAttribute('data-precio');
+            
+            document.getElementById('editarId').value = id;
+            document.getElementById('editarNombre').value = nombre;
+            document.getElementById('editarDescripcion').value = descripcion;
+            document.getElementById('editarPrecio').value = precio;
+            
+            document.getElementById('formEditar').action = '/productos/' + id;
+        }
+    </script>
+</body>
+</html>
